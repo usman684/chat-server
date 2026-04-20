@@ -10,7 +10,7 @@ app.use(cors());
 const server = http.createServer(app);
 
 // 🔥 IMPORTANT: Replace frontend URL after deploy
-const FRONTEND_URL = "https://your-frontend.vercel.app";
+const FRONTEND_URL = "https://chat-server-production-aea7.up.railway.app/";
 
 const io = new Server(server, {
   cors: {
