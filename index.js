@@ -4,14 +4,11 @@ import { Server } from "socket.io";
 import cors from "cors";
 
 const app = express();
-
 app.use(cors());
 
 const server = http.createServer(app);
 
-// 🔥 IMPORTANT: Replace frontend URL after deploy
-const FRONTEND_URL = "https://chat-server-production-aea7.up.railway.app";
-
+// ⚡ allow all for testing (production me frontend URL lagana)
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -23,16 +20,19 @@ io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
   socket.on("join", (roomId) => {
+    console.log("JOIN:", roomId);
     socket.join(roomId);
+  });
+
+  socket.on("send", (message) => {
+    console.log("MSG:", message);
+
+    // 🔥 IMPORTANT FIX (THIS WAS YOUR BUG)
+    io.to(message.room).emit("message", message);
   });
 
   socket.on("leave", (roomId) => {
     socket.leave(roomId);
-  });
-
-  socket.on("send", (message) => {
-    console.log(message);
-    socket.to(message.room).emit("message", message);
   });
 
   socket.on("disconnect", () => {
@@ -40,7 +40,6 @@ io.on("connection", (socket) => {
   });
 });
 
-// 🔥 IMPORTANT: Production port fix
 const PORT = process.env.PORT || 8080;
 
 server.listen(PORT, () => {
