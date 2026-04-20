@@ -10,13 +10,12 @@ app.use(cors());
 const server = http.createServer(app);
 
 // 🔥 IMPORTANT: Replace frontend URL after deploy
-const FRONTEND_URL = "https://chat-server-production-aea7.up.railway.app/";
+const FRONTEND_URL = "https://chat-client-kappa-mocha.vercel.app/";
 
 const io = new Server(server, {
   cors: {
-    origin: FRONTEND_URL,
+    origin: "*",
     methods: ["GET", "POST"],
-    credentials: true,
   },
 });
 
